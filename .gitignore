@@ -99,3 +99,16 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+.gitignore
+t1
+t2
+t3
+test
+photos
+faces
+google_images_download.py
+main.py
+Thumbs.db
+Facer.komodoproject
+.komodotools
