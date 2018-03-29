@@ -3,11 +3,20 @@ import numpy as np
 import os
 import json as JsonParser
 import hashlib as hlb
+import random
 FCR_VERSION = "0.1b"
 def md5(text):
     d_b = hlb.md5()
     d_b.update(text.encode("utf-8"))
     return d_b.hexdigest()
+class Face:
+    def __init__(self,FaceIMG=None,Rect=tuple(),Label=int()):
+        self.FaceIMG = FaceIMG
+        self.Rect = Rect
+        self.Label = Label
+    FaceIMG = None
+    Rect = tuple()
+    Label = int()
 class Facer:
     FCR_Algorithms = np.array([md5("Eigen_FR"),
                                md5("Fisher_FR"),
@@ -71,6 +80,26 @@ class Facer:
                     "fcr_file":"Untitled.xml",
                     "fcr_algorithm":self.FCR_Algorithms[2]
                 }))
+    def DetectSingleFace(self,img,Label):
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5);
+        if (len(faces) == 0):
+            return None
+        elif(len(faces) > 1):
+            return None
+        return Face(gray[y:y+w, x:x+h], faces[0], Label)
+    def TrainSingleFace(self,img,Label):
+        Face = self.DetectSingleFace(img,Label)
+        if Face is not None:
+            try:
+                self.facer_Recognizer.train(Face.FaceIMG,Face.Label)
+            except:
+                return False
+            return True
+        return False
+    def TrainMultipleFaces(self,img):
+        random.randint(0)
     def GetAlgorithm(self,algoid):
         if(algoid == self.FCR_Algorithms[0]):
             return cv2.face.EigenFaceRecognizer_create()
