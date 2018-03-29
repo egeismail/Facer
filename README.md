@@ -1,2 +1,2 @@
 # Facer
-Face Recognition Library
+Face Recognition Library with OpenCV
